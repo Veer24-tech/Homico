@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Listing details</h2>
+    <ul>
+        <li><%= listingDetails.title%></li>
+        <li><%= listingDetails.description%></li>
+        <li>&#8377;<%= listingDetails.price.toLocaleString('en-IN')%></li>  
+         <!-- &#8377; used for rupee symbol   -->
+    <!-- and .toLocaleString('en-IN') used for formatting the price in Indian format with commas  where (en-IN) is the locale for India -->
+          <li><%= listingDetails.country%></li>
+        <li><%= listingDetails.location%></li>
+      
+       
+    </ul>
+    <form method="get" action="/listings/<%= listingDetails._id %>/edit">
+        <button>Update details</button>
+    </form>
+</body>
+</html>
