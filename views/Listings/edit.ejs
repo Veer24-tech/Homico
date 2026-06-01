@@ -1,15 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<%  layout("layouts/boilerplate") %>
 <body>
-    <h2>Edit your apartment/vella</h2>
-    <!-- <form >
-        <label for="title">Title:</label>
-        <input type="text"  value="<%listingDetails.title%>" id="title" name="listing[title]">
-    </form>" -->
+    <h2>Update details</h2>
+  <form  method="post" action="/listings/<%=listingDetails._id%>?_method=PUT">
+       <label for="title">Title:</label>
+        <input type="text" id="title" name="listing[title]" value="<%=listingDetails.title%>">
+        <br>
+        <br>
+        <br>
+        <label for="description">Descrription:</label>
+        <textarea type="text" id="description" name="listing[description]"><%=listingDetails.description%></textarea>
+        <br>
+        <br>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="listing[price]" value="<%=listingDetails.price%>">
+        <br>
+        <br>
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="listing[location]" value="<%=listingDetails.location%>">
+        <br>
+        <br>
+        <label for="country">Country:</label>
+        <input type="text" id="country" name="listing[country]" value="<%=listingDetails.country%>">
+        <br>
+        <button type="submit">Save Listing</button>
+    </form>
+    
+    
 </body>
-</html>

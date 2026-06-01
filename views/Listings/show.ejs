@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<%layout("layouts/boilerplate")%>
 <body>
     <h2>Listing details</h2>
     <ul>
@@ -18,8 +12,9 @@
       
        
     </ul>
-    <form method="get" action="/listings/<%= listingDetails._id %>/edit">
-        <button>Update details</button>
-    </form>
+   <a href="/listings/<%=listingDetails.id%>/edit">Edit details</a>
+ <form method="post" action="/listings/<%=listingDetails._id%>?_method=DELETE">
+     <button type="submit">Delete Listing</button>
+ </form>
 </body>
 </html>

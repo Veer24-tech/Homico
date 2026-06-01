@@ -1,0 +1,49 @@
+    /* body{
+        background-color:blueviolet;
+    } */
+    .navbar {
+        height: 5rem;
+        background-color: white;
+
+    }
+
+    .fa-regular {
+        font-size: 1.8rem;
+        color: #f24e1e;
+    }
+
+    --/* footer----*/
+
+    .f-info {
+        height: 5rem;
+        background-color: #f24e1e;
+        display: flex;
+        flex-wrap:wrap;
+        justify-content: center;
+    }
+
+    .f-social {
+        display: flex;
+        align-items: center;
+        margin-top: 0, 5rem;
+        color: white;
+    }
+
+    .f-social i {
+        font-size: 1.5rem;
+        color: white;
+        margin: 0 0.5rem;
+    }
+
+    
+    .f-info .links a {
+        display: flex;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        margin: 0 0.5rem;
+    }
+
+   .links a:hover {
+       text-decoration: underline;
+    }
