@@ -1,20 +1,62 @@
-<%layout("layouts/boilerplate")%>
-<body>
-    <h2>Listing details</h2>
-    <ul>
-        <li><%= listingDetails.title%></li>
-        <li><%= listingDetails.description%></li>
-        <li>&#8377;<%= listingDetails.price.toLocaleString('en-IN')%></li>  
-         <!-- &#8377; used for rupee symbol   -->
-    <!-- and .toLocaleString('en-IN') used for formatting the price in Indian format with commas  where (en-IN) is the locale for India -->
-          <li><%= listingDetails.country%></li>
-        <li><%= listingDetails.location%></li>
-      
-       
-    </ul>
-   <a href="/listings/<%=listingDetails.id%>/edit">Edit details</a>
- <form method="post" action="/listings/<%=listingDetails._id%>?_method=DELETE">
-     <button type="submit">Delete Listing</button>
- </form>
-</body>
-</html>
+<% layout("layouts/boilerplate") %>
+
+<div class="container mt-4">
+
+
+    <div class="card show-card shadow">
+
+        <img src="<%= listingDetails.image.url %>"
+            class="card-img-top show-img"
+            alt="listing-image">
+
+        <div class="card-body">
+
+            <h3 class="card-title">
+                <%= listingDetails.title %>
+            </h3>
+
+            <p class="card-text">
+                <%= listingDetails.description %>
+            </p>
+
+            <hr>
+
+            <p>
+                <strong>Price:</strong>
+                ₹<%= listingDetails.price.toLocaleString('en-IN') %>
+            </p>
+
+            <p>
+                <strong>Country:</strong>
+                <%= listingDetails.country %>
+            </p>
+
+            <p>
+                <strong>Location:</strong>
+                <%= listingDetails.location %>
+            </p>
+
+            <div class="d-flex gap-3 mt-4">
+
+                <a href="/listings/<%= listingDetails._id %>/edit"
+                    class="btn btn-primary">
+                    Edit
+                </a>
+
+                <form method="POST"
+                    action="/listings/<%= listingDetails._id %>?_method=DELETE">
+
+                    <button type="submit"
+                        class="btn btn-danger ">
+                        Delete
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
