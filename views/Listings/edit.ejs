@@ -2,42 +2,66 @@
 
     <body>
         <h2>Update details</h2>
-        <form method="post" action="/listings/<%=listingDetails._id%>?_method=PUT">
+        <form method="post" action="/listings/<%=listingDetails._id%>?_method=PUT" class="needs-validation" novalidate      >
             <div class="row">
 
                 <div class="col-md-8 offset-md-1">
                     <div class="mb-3">
                         <label for="title" class="form-label">Title:</label>
                         <input type="text" id="title" name="listing[title]" value="<%=listingDetails.title%>"
-                            class="form-control">
+                            class="form-control" required>
+                            
+                                <div class="invalid-feedback">
+                                    Please Enter title
+                                </div>
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description:</label>
                         <textarea type="text" id="description" name="listing[description]"
-                            class="form-control"><%=listingDetails.description%></textarea>
+                            class="form-control" required><%=listingDetails.description%></textarea>
+                           
+                                <div class="invalid-feedback">
+                                    Please enter description
+                                </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="price" class="form-label">Price:</label>
                         <input type="number" id="price" name="listing[price]" value="<%=listingDetails.price%>"
-                            class="form-control">
+                            class="form-control" required>
+                            
+                                <div class="invalid-feedback">
+                                    Please enter price
+                                </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="location" class="form-label">Location:</label>
                         <input type="text" id="location" name="listing[location]" value="<%=listingDetails.location%>"
-                            class="form-control">
+                            class="form-control" required>
+                             
+                                <div class="invalid-feedback">
+                                    Please enter location
+                                </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="country" class="form-label">Country:</label>
                         <input type="text" id="country" name="listing[country]" value="<%=listingDetails.country%>"
-                            class="form-control">
+                            class="form-control" required>
+                            
+                                <div class="invalid-feedback">
+                                    Please mention country
+                                </div>
                     </div>
                        <div class="mb-3">
                         <label for="image" class="form-label">Image:</label>
-                        <textarea type="text" id="image" name="listing[image]"
-                            class="form-control"><%=listingDetails.image.url%></textarea>
+                        <textarea type="text" id="image" name="listing[image][url]"
+                            class="form-control" required><%=listingDetails.image.url%></textarea>
+                           
+                                <div class="invalid-feedback">
+                                    Provide link of your property
+                                </div>
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary btn-add">Save Listing</button>
