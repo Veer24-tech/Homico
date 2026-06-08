@@ -3,6 +3,16 @@
        flex-direction:column;
          min-height:100vh;
     }
+    html{
+    height:100%;
+}
+    .container{
+    flex:1;
+}
+
+.main-content{
+    flex:1;
+}
     .navbar {
         height: 5rem;
         background-color: white;
@@ -15,6 +25,11 @@
     }
 
     /* footer */
+    /* footer {
+    position:fixed;
+    bottom: 0;
+    width: 100%;    
+} */
     .f-info{
         height:7rem;
         background-color: #f24e1e;
@@ -23,6 +38,7 @@
         flex-direction:column;
         align-items:center;
         color:white;
+       
 
     }
     .f-social{
