@@ -58,5 +58,37 @@
         </div>
 
     </div>
+       <div class="mb-3 mt-3 offset-2">
+    <h2>Drop your Review</h2>
 
+    <form action="/listings/<%= listingDetails._id %>/reviews" method="POST">
+
+        <div class="mb-3">
+            <label for="rating">Ratings</label>
+            <input
+                type="range"
+                class="form-range"
+                id="rating"
+                name="review[rating]"
+                min="1"
+                max="5">
+        </div>
+
+        <div class="mb-3">
+            <label for="comment" class="form-label">
+                Your experience with this property
+            </label>
+
+            <textarea
+                name="review[comment]"
+                id="comment"
+                class="form-control">
+            </textarea>
+        </div>
+
+        <button type="submit" class="btn btn-outline-dark">
+            Done
+        </button>
+
+    </form>
 </div>

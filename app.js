@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const listing = require('./model/listing');
+const review=require('./model/review');
 const path = require('path');
 const methodOverride = require("method-override");
 const ejsmate = require("ejs-mate");
@@ -156,6 +157,20 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
     res.redirect("/listings");
 }))
 
+// reviews  route----
+app.post("/listings/:id/reviews",async(req,res)=>{
+  let listingDetails=await listing.findById(req.params.id);
+   let newReview= new review(req.body.review);
+
+   listingDetails.review.push(newReview);
+   await newReview.save();
+   await listingDetails.save();
+   console.log("reviewas saved");
+   res.send("Reviews added");
+
+
+})
+
 // random route errrr----
 app.use((req, res, next) => {
     next(new ExpressError(404, "Page not found!"));
@@ -168,6 +183,8 @@ app.use((err, req, res, next) => {
 
 
 });
+
+
 
 app.listen(port, () => {
     console.log(`Server is ruuning on port ${port}`);
