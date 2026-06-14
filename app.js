@@ -162,11 +162,11 @@ app.post("/listings/:id/reviews",async(req,res)=>{
   let listingDetails=await listing.findById(req.params.id);
    let newReview= new review(req.body.review);
 
-   listingDetails.review.push(newReview);
+   listingDetails.reviews.push(newReview);
    await newReview.save();
    await listingDetails.save();
    console.log("reviewas saved");
-   res.send("Reviews added");
+   res.redirect(`/listings/${listingDetails.id}`);
 
 
 })
