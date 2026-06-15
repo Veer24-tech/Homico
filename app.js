@@ -9,6 +9,7 @@ const ejsmate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
 const{listingSchema}=require("./schema");
+const { wrap } = require('module');
 
 // for using ejs template engine set the view engine to ejs
 app.set("view engine", "ejs");
@@ -90,7 +91,7 @@ app.get("/listings/new", (req, res) => {
 //show route
 app.get("/listings/:id", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
-    let listingDetails = await listing.findById(id);
+    let listingDetails = await listing.findById(id).populate("reviews");
     res.render("Listings/show.ejs", { listingDetails });
 }));
 
@@ -157,7 +158,7 @@ app.delete("/listings/:id", wrapAsync(async (req, res) => {
     res.redirect("/listings");
 }))
 
-// reviews  route----
+// reviewspost  route----
 app.post("/listings/:id/reviews",async(req,res)=>{
   let listingDetails=await listing.findById(req.params.id);
    let newReview= new review(req.body.review);
@@ -170,6 +171,14 @@ app.post("/listings/:id/reviews",async(req,res)=>{
 
 
 })
+//review delete route
+app.delete("/listings/:id/reviews/:reviewId",wrapAsync( async(req,res)=>{
+    let{id ,reviewId}=req.params;
+    await listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});  // $pull method se dlt hoga vo review jis review ki id match hogi -
+   await  review.findByIdAndDelete(reviewId);
+   res.redirect(`/listings/${id}`);
+
+}))
 
 // random route errrr----
 app.use((req, res, next) => {
