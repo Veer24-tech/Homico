@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const listing = require('./model/listing');
+const Listing = require('./model/listing');
 const review=require('./model/review');
 const path = require('path');
 const methodOverride = require("method-override");
@@ -10,6 +10,9 @@ const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
 const{listingSchema}=require("./schema");
 const { wrap } = require('module');
+
+const listing=require("./routes/listings");  // listings  routesssss
+const reviews=require("./routes/reviews");   //  reviews routeeeee
 
 // for using ejs template engine set the view engine to ejs
 app.set("view engine", "ejs");
@@ -54,20 +57,7 @@ async function main() {
 
 // })
 
-//joi function for schema validation-
-  const validateListing=(req,res,next)=>{
 
-// let result=listingSchema.validate(req.body);
-let {error}=listingSchema.validate(req.body);
-// console.log(result);
-if(error){  
-    let errMsg= error.details.map((el)=>el.message).join(",");
-    throw new ExpressError(400,errMsg);
-}  
-else{
-    next();
-}
-}
 
 
 
@@ -75,110 +65,12 @@ app.get('/', (req, res) => {
     res.send(`App is working`);
 })
 
-app.get("/listings", wrapAsync(async (req, res) => {
-    let allListings = await listing.find({});
-    res.render("Listings/index.ejs", { allListings });
+// using all routes ----
+
+app.use("/listings",listing);////   uses listing routes---
+app.use("/listings/:id/reviews",reviews); // uses imported reviews 
 
 
-}));
-
-//new route
-app.get("/listings/new", (req, res) => {
-    res.render("Listings/new.ejs");
-})
-
-
-//show route
-app.get("/listings/:id", wrapAsync(async (req, res, next) => {
-    let { id } = req.params;
-    let listingDetails = await listing.findById(id).populate("reviews");
-    res.render("Listings/show.ejs", { listingDetails });
-}));
-
-
-// post rote for saving data of form in database
-app.post("/listings", validateListing, wrapAsync(async (req, res,next) => {
-//-- joi validation--//
-// let result=listingSchema.validate(req.body);
-// console.log(result);                          ----->>   uper function banay diya ab iske liye bas uss function ko use kro
-// if(result.err){
-//     throw new ExpressError(404,res.err);
-
-// }
-
-    // if (!req.body.listing) {
-    //     throw (new ExpressError(400, "Send valid data !"));
-    // }
-
-    //method 1- let{title,description,price,country,location}=req.body.listing;
-    //  method 2-> let listing=req.body.listing;    pr iske liye form me name me aise likna hoga listing[title],listing[description] etc  
-    // method 3-> directly create a new listing object and save it in the database
-    const newListing = new listing(req.body.listing);
-    // jab data like hospscoh bse send kiya jaye   --> hm chate hai ki agr koi detals missing hai to save na data base me 
-    //form wala to handle ho gya tha pr listings me post req hospcoch s e bhjeje ge to aad ho jaygi listing 
-    //isiliye ye error handle krna ke method 1 hai-
-
-
-    // if (!newListing.title) {
-    //     throw (new ExpressError(400, "Title is missing"));
-    // }
-    // if (!newListing.description) {
-    //     throw (new ExpressError(400, "description is missing"));
-    // }
-
-
-    //aaise hi sare feilds ke liye define krge jo ek aacha devloper ka quality nahui hai-----we use JOI for schema validation
-    await newListing.save();  // save the form data in the database
-    res.redirect("/listings");
-
-}));
-
-//edit route
-app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let listingDetails = await listing.findById(id);
-    res.render("Listings/edit.ejs", { listingDetails });
-}));
-
-
-// saving the updated data  of listings in the database
-app.put("/listings/:id",validateListing,     wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    //// req.body.listing me form ka sara updated data (title, description, price, etc.) object ke form me hota hai.
-    // findByIdAndUpdate() ko ye object dekar database me matching fields update kar dete hain.
-
-    await listing.findByIdAndUpdate(id, { ...req.body.listing });//{...req.body.listing} ka use krte hai kyuki req.body.listing me title,description,price,country,location sab hote hai to unko alag alag pass krne ke bajaye ...req.body.listing se sare data ko pass kr dete hai
-    res.redirect(`/listings/${id}`);
-}));
-//delete listing
-app.delete("/listings/:id", wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let deletedListing = await listing.findByIdAndDelete(id);
-    console.log("deleted listing details", deletedListing.title);
-    res.redirect("/listings");
-}))
-
-// reviewspost  route----
-app.post("/listings/:id/reviews",async(req,res)=>{
-  let listingDetails=await listing.findById(req.params.id);
-   let newReview= new review(req.body.review);
-
-   listingDetails.reviews.push(newReview);
-   await newReview.save();
-   await listingDetails.save();
-   console.log("reviewas saved");
-   res.redirect(`/listings/${listingDetails.id}`);
-
-
-})
-//review delete route
-app.delete("/listings/:id/reviews/:reviewId",wrapAsync( async(req,res)=>{
-    let{id ,reviewId}=req.params;
-    await listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}});  // $pull method se dlt hoga vo review jis review ki id match hogi -
-   await  review.findByIdAndDelete(reviewId);
-   res.redirect(`/listings/${id}`);
-
-}))
 
 // random route errrr----
 app.use((req, res, next) => {

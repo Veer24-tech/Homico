@@ -41,5 +41,13 @@ const listingSchema=new mongoose.Schema({
    
     });
 
+    //  mongoose middlewares for handling deletion (post delete ho to uske reviews bhi dlt ho jaye );
+    listingSchema.post("findOneAndDelete",async(listing)=>{
+        if(listing){
+               await review.deleteMany({_id:{$in :listing.reviews}});
+        }
+     
+    })
+
 const listing=mongoose.model("Listing",listingSchema);
 module.exports=listing;
