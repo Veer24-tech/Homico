@@ -27,16 +27,18 @@ router.post("/", async (req, res) => {
     listingDetails.reviews.push(newReview);
     await newReview.save();
     await listingDetails.save();
+    req.flash("success","Review Added !");
     console.log("reviewas saved");
     res.redirect(`/listings/${listingDetails.id}`);
 
 
 })
 //review delete route
-router.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req, res) => {
+router.delete("/:reviewId", wrapAsync(async (req, res) => {
     let { id, reviewId } = req.params;
     await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });  // $pull method se dlt hoga vo review jis review ki id match hogi -
     await review.findByIdAndDelete(reviewId);
+    req.flash("success","Review Deleted !")
     res.redirect(`/listings/${id}`);
 
 }))

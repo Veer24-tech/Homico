@@ -13,6 +13,8 @@ const { wrap } = require('module');
 
 const listing=require("./routes/listings");  // listings  routesssss
 const reviews=require("./routes/reviews");   //  reviews routeeeee
+const session=require('express-session');
+const flash=require('connect-flash');
 
 // for using ejs template engine set the view engine to ejs
 app.set("view engine", "ejs");
@@ -65,6 +67,30 @@ app.get('/', (req, res) => {
     res.send(`App is working`);
 })
 
+// session options
+const sessionOptions={
+    secret:"mysupersecret",
+    resave:false,
+    saveUninitialized:true,
+    cookie:{
+        expires:Date.now()+7*24*60*60*1000,
+        maxAge: 7*24*60*60*1000,
+        httpOnly:true,
+       }
+}
+
+//using sessions---->
+app.use(session(sessionOptions));
+app.use(flash());
+
+
+
+app.use((req,res,next)=>{
+    res.locals.success=req.flash("success");
+    res.locals.error=req.flash("error");;
+    next();
+
+});
 // using all routes ----
 
 app.use("/listings",listing);////   uses listing routes---

@@ -38,6 +38,10 @@ router.get("/new", (req, res) => {
 router.get("/:id", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
     let listingDetails = await Listing.findById(id).populate("reviews");
+    if(!listingDetails){
+        req.flash("error","Listing you requested for does not exsists!");
+        return res.redirect("/listings");
+    }
     res.render("Listings/show.ejs", { listingDetails });
 }));
 
@@ -75,6 +79,7 @@ router.post("/", validateListing, wrapAsync(async (req, res,next) => {
 
     //aaise hi sare feilds ke liye define krge jo ek aacha devloper ka quality nahui hai-----we use JOI for schema validation
     await newListing.save();  // save the form data in the database
+    req.flash("success","Listing Added Successfully");// flash message when listing addes succesfully
     res.redirect("/listings");
 
 }));
@@ -83,6 +88,10 @@ router.post("/", validateListing, wrapAsync(async (req, res,next) => {
 router.get("/:id/edit", wrapAsync(async (req, res) => {
     let { id } = req.params;
     let listingDetails = await Listing.findById(id);
+    if(!listingDetails){
+        req.flash("error","Listing you requested for does not exsists");
+        return res.redirect("/listings");
+    }
     res.render("Listings/edit.ejs", { listingDetails });
 }));
 
@@ -94,12 +103,14 @@ router.put("/:id",validateListing,     wrapAsync(async (req, res) => {
     // findByIdAndUpdate() ko ye object dekar database me matching fields update kar dete hain.
 
     await Listing.findByIdAndUpdate(id, { ...req.body.listing });//{...req.body.listing} ka use krte hai kyuki req.body.listing me title,description,price,country,location sab hote hai to unko alag alag pass krne ke bajaye ...req.body.listing se sare data ko pass kr dete hai
+    req.flash("success","Details Updated!");
     res.redirect(`/listings/${id}`);
 }));
 //delete listing
 router.delete("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
+    req.flash("success","Listing deleted succesfully");
     console.log("deleted listing details", deletedListing.title);
     res.redirect("/listings");
 }))
