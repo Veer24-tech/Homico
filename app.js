@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const Listing = require('./model/listing');
 const review=require('./model/review');
+const User=require('./model/user');
 const path = require('path');
 const methodOverride = require("method-override");
 const ejsmate = require("ejs-mate");
@@ -11,10 +12,16 @@ const ExpressError = require("./utils/ExpressError");
 const{listingSchema}=require("./schema");
 const { wrap } = require('module');
 
-const listing=require("./routes/listings");  // listings  routesssss
-const reviews=require("./routes/reviews");   //  reviews routeeeee
+const listingRouter=require("./routes/listings");  // listings  routesssss
+const reviewsRouter=require("./routes/reviews");   //  reviews routeeeee
+const userRouter=require("./routes/users");   //  users routeeeee
 const session=require('express-session');
 const flash=require('connect-flash');
+//   authentication & autorization 
+const passport=require('passport');
+const LocalStrategy=require('passport-local');
+
+
 
 // for using ejs template engine set the view engine to ejs
 app.set("view engine", "ejs");
@@ -82,7 +89,28 @@ const sessionOptions={
 //using sessions---->
 app.use(session(sessionOptions));
 app.use(flash());
+// autentication & authorization
+app.use(passport.initialize());
+app.use(passport.session());
 
+passport.use(new  LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+/// demo user
+app.get("/demoUser", async (req, res) => {
+    
+        let fakeUser = new User({
+            email: "abc@gmail.com",
+            username: "Sewcuriy09twy",
+        });
+
+        let registeredUser = await User.register(fakeUser, "password");
+        console.log(registeredUser);
+
+        res.send(registeredUser);
+    
+});
 
 
 app.use((req,res,next)=>{
@@ -93,8 +121,9 @@ app.use((req,res,next)=>{
 });
 // using all routes ----
 
-app.use("/listings",listing);////   uses listing routes---
-app.use("/listings/:id/reviews",reviews); // uses imported reviews 
+app.use("/listings",listingRouter);////   uses listing routes---
+app.use("/listings/:id/reviews",reviewsRouter); // uses imported reviews 
+app.use("/",userRouter); // signup 
 
 
 
