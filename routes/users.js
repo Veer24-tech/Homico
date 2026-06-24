@@ -1,6 +1,7 @@
 const express=require("express");
 const router=express.Router(); 
 const User=require('../model/user');
+const passport = require("passport");
  
 router.get("/signup",(req,res)=>{
     res.render("users/signup");
@@ -22,6 +23,15 @@ router.get("/signup",(req,res)=>{
 }
  })
 
+ router.get("/login",(req,res)=>{
+   res.render("users/login");
+ })
+
+router.post("/login",passport.authenticate("local",{failureRedirect:"/login",failureFlash:true}),
+async(req,res)=>{
+   req.flash("success","Login Succesfull ! Welcome to HOMICO");
+   res.redirect("/listings");
+})
 
 
 module.exports=router;
