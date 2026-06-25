@@ -5,6 +5,7 @@ const review = require('../model/review');
 const Listing = require('../model/listing');
 const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/ExpressError");
+const{isLoggedIn}=require('../middleware');
 
 
 //validate review--
@@ -34,7 +35,7 @@ router.post("/", async (req, res) => {
 
 })
 //review delete route
-router.delete("/:reviewId", wrapAsync(async (req, res) => {
+router.delete("/:reviewId", isLoggedIn,wrapAsync(async (req, res) => {
     let { id, reviewId } = req.params;
     await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });  // $pull method se dlt hoga vo review jis review ki id match hogi -
     await review.findByIdAndDelete(reviewId);

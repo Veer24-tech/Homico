@@ -5,6 +5,7 @@ const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/ExpressError");
 const{listingSchema}=require("../schema");
 const { wrap } = require('module');
+const{isLoggedIn}=require('../middleware');
 
 //joi function for schema validation-
   const validateListing=(req,res,next)=>{
@@ -29,7 +30,8 @@ router.get("/", wrapAsync(async (req, res) => {
 }));
 
 //new route
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn,(req, res) => {
+    
     res.render("Listings/new.ejs");
 })
 
@@ -85,7 +87,7 @@ router.post("/", validateListing, wrapAsync(async (req, res,next) => {
 }));
 
 //edit route
-router.get("/:id/edit", wrapAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedIn, wrapAsync(async (req, res) => {
     let { id } = req.params;
     let listingDetails = await Listing.findById(id);
     if(!listingDetails){
@@ -107,7 +109,7 @@ router.put("/:id",validateListing,     wrapAsync(async (req, res) => {
     res.redirect(`/listings/${id}`);
 }));
 //delete listing
-router.delete("/:id", wrapAsync(async (req, res) => {
+router.delete("/:id",isLoggedIn, wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     req.flash("success","Listing deleted succesfully");
