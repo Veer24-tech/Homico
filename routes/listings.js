@@ -39,7 +39,7 @@ router.get("/new", isLoggedIn,(req, res) => {
 //show route
 router.get("/:id", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
-    let listingDetails = await Listing.findById(id).populate("reviews");
+    let listingDetails = await Listing.findById(id).populate("reviews").populate("owner");
     if(!listingDetails){
         req.flash("error","Listing you requested for does not exsists!");
         return res.redirect("/listings");
@@ -47,7 +47,7 @@ router.get("/:id", wrapAsync(async (req, res, next) => {
     res.render("Listings/show.ejs", { listingDetails });
 }));
 
-
+//create route
 // post rote for saving data of form in database
 router.post("/", validateListing, wrapAsync(async (req, res,next) => {
 //-- joi validation--//
@@ -78,7 +78,7 @@ router.post("/", validateListing, wrapAsync(async (req, res,next) => {
     //     throw (new ExpressError(400, "description is missing"));
     // }
 
-
+  newListing.owner=req.user._id;
     //aaise hi sare feilds ke liye define krge jo ek aacha devloper ka quality nahui hai-----we use JOI for schema validation
     await newListing.save();  // save the form data in the database
     req.flash("success","Listing Added Successfully");// flash message when listing addes succesfully
