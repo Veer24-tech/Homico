@@ -5,7 +5,9 @@ const wrapAsync = require("../utils/wrapAsync");
 const ExpressError = require("../utils/ExpressError");
 const{listingSchema}=require("../schema");
 const { wrap } = require('module');
-const{isLoggedIn}=require('../middleware');
+const{isLoggedIn,isowner}=require('../middleware');
+
+
 
 //joi function for schema validation-
   const validateListing=(req,res,next)=>{
@@ -87,7 +89,7 @@ router.post("/", validateListing, wrapAsync(async (req, res,next) => {
 }));
 
 //edit route
-router.get("/:id/edit", isLoggedIn, wrapAsync(async (req, res) => {
+router.get("/:id/edit", isLoggedIn, isowner, wrapAsync(async (req, res) => {
     let { id } = req.params;
     let listingDetails = await Listing.findById(id);
     if(!listingDetails){
@@ -99,7 +101,7 @@ router.get("/:id/edit", isLoggedIn, wrapAsync(async (req, res) => {
 
 
 // saving the updated data  of listings in the database
-router.put("/:id",validateListing,     wrapAsync(async (req, res) => {
+router.put("/:id",validateListing,  isowner,   wrapAsync(async (req, res) => {
     let { id } = req.params;
     //// req.body.listing me form ka sara updated data (title, description, price, etc.) object ke form me hota hai.
     // findByIdAndUpdate() ko ye object dekar database me matching fields update kar dete hain.
@@ -109,7 +111,7 @@ router.put("/:id",validateListing,     wrapAsync(async (req, res) => {
     res.redirect(`/listings/${id}`);
 }));
 //delete listing
-router.delete("/:id",isLoggedIn, wrapAsync(async (req, res) => {
+router.delete("/:id",isLoggedIn,isowner, wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deletedListing = await Listing.findByIdAndDelete(id);
     req.flash("success","Listing deleted succesfully");
