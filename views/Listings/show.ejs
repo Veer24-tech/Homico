@@ -36,7 +36,7 @@
                 <strong>Location:</strong>
                 <%= listingDetails.location %>
             </p>
-
+            <%if(currUser && currUser._id.equals(listingDetails.owner._id)){%>
             <div class="d-flex gap-3 mt-4">
 
                 <a href="/listings/<%= listingDetails._id %>/edit"
@@ -55,6 +55,7 @@
                 </form>
 
             </div>
+       <% }%>
 
         </div>
 
