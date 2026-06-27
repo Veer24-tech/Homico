@@ -36,7 +36,7 @@
                 <strong>Location:</strong>
                 <%= listingDetails.location %>
             </p>
-            <!-- if(currUser && currUser._id.equals(listingDetails.owner._id)){%> -->
+            <%if(currUser && currUser._id.equals(listingDetails.owner._id)){%>
             <div class="d-flex gap-3 mt-4">
 
                 <a href="/listings/<%= listingDetails._id %>/edit"
@@ -55,12 +55,13 @@
                 </form>
 
             </div>
-       <!--  }%> -->
+       <% }%>
 
         </div>
 
     </div>
        <div class="mb-3 mt-3 offset-2">
+        <% if(currUser){%>
     <h2>Drop your Review</h2>
 
     <form action="/listings/<%= listingDetails._id %>/reviews" method="POST"  class="needs-validation" novalidate>
@@ -93,7 +94,7 @@
         <button type="submit" class="btn btn-outline-dark">
             Done
         </button>
-
+    <%}%>
     </form>
    <br>
    <br>
@@ -105,7 +106,7 @@
         <div class="card-body">
            
 
-             <h5 class="card-title">user</h5>
+             <p class="card-title"><i>@<%=review.author.username%></i></p>
               <p class="card-text"><%=review.comment%></p>
               <p class="card-text"><%=review.rating%>Stars</p>   
                 <form method="post" action="/listings/<%=listingDetails.id%>/reviews/<%=review.id%>?_method=DELETE">

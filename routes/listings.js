@@ -2,27 +2,11 @@ const express=require("express");
 const router=express.Router();  // router class --
 const Listing = require('../model/listing');
 const wrapAsync = require("../utils/wrapAsync");
-const ExpressError = require("../utils/ExpressError");
-const{listingSchema}=require("../schema");
 const { wrap } = require('module');
-const{isLoggedIn,isowner}=require('../middleware');
+const{isLoggedIn,isowner,validateListing}=require('../middleware');
 
 
 
-//joi function for schema validation-
-  const validateListing=(req,res,next)=>{
-
-// let result=listingSchema.validate(req.body);
-let {error}=listingSchema.validate(req.body);
-// console.log(result);
-if(error){  
-    let errMsg= error.details.map((el)=>el.message).join(",");
-    throw new ExpressError(400,errMsg);
-}  
-else{
-    next();
-}
-}
 
 router.get("/", wrapAsync(async (req, res) => {
     let allListings = await Listing.find({});
@@ -41,7 +25,7 @@ router.get("/new", isLoggedIn,(req, res) => {
 //show route
 router.get("/:id", wrapAsync(async (req, res, next) => {
     let { id } = req.params;
-    let listingDetails = await Listing.findById(id).populate("reviews").populate("owner");
+    let listingDetails = await Listing.findById(id).populate({path:"reviews",populate:{path:"author"},}).populate("owner");
     if(!listingDetails){
         req.flash("error","Listing you requested for does not exsists!");
         return res.redirect("/listings");
