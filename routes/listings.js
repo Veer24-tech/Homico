@@ -18,7 +18,7 @@ router.get("/new", isLoggedIn,(listingController.renderNewForm));
 //show route
 router.get("/:id", wrapAsync(listingController.showListing));
 
-//create route
+
 // post rote for saving data of form in database
 router.post("/", validateListing, wrapAsync(listingController.createListing));
 
