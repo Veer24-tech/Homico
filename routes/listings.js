@@ -9,28 +9,38 @@ const listingController=require('../controllers/listing');
 
 
 
-router.get("/", wrapAsync(listingController.index));
+// router.get("/", wrapAsync(listingController.index));
+//using routter.route---->
+router
+.route("/")
+.get(wrapAsync(listingController.index))
+.post(validateListing, wrapAsync(listingController.createListing));
 
 //new route
 router.get("/new", isLoggedIn,(listingController.renderNewForm));
 
+router
+.route("/:id")
+.get( wrapAsync(listingController.showListing))
+.put(validateListing,  isowner,   wrapAsync(listingController.updateListing))
+.delete(isLoggedIn,isowner, wrapAsync(listingController.deleteListing));
 
 //show route
-router.get("/:id", wrapAsync(listingController.showListing));
+// router.get("/:id", wrapAsync(listingController.showListing));
 
 
 // post rote for saving data of form in database
-router.post("/", validateListing, wrapAsync(listingController.createListing));
+// router.post("/", validateListing, wrapAsync(listingController.createListing));
 
 //edit route
 router.get("/:id/edit", isLoggedIn, isowner, wrapAsync(listingController.renderEditForm));
 
 
 // saving the updated data  of listings in the database
-router.put("/:id",validateListing,  isowner,   wrapAsync(listingController.updateListing));
+// router.put("/:id",validateListing,  isowner,   wrapAsync(listingController.updateListing));
 
 //delete listing
-router.delete("/:id",isLoggedIn,isowner, wrapAsync(listingController.deleteListing));
+// router.delete("/:id",isLoggedIn,isowner, wrapAsync(listingController.deleteListing));
 
 
 module.exports=router;
