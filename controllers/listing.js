@@ -24,6 +24,12 @@ module.exports.showListing=async (req, res, next) => {
 
 //create listing form---
 module.exports.createListing=(async (req, res,next) => {
+    console.log(req.file);
+    let url=req.file.path;
+    let filename=req.file.filename;
+    console.log(url);
+    console.log(filename);
+   
 //-- joi validation--//
 // let result=listingSchema.validate(req.body);
 // console.log(result);                          ----->>   uper function banay diya ab iske liye bas uss function ko use kro
@@ -40,6 +46,7 @@ module.exports.createListing=(async (req, res,next) => {
     //  method 2-> let listing=req.body.listing;    pr iske liye form me name me aise likna hoga listing[title],listing[description] etc  
     // method 3-> directly create a new listing object and save it in the database
     const newListing = new Listing(req.body.listing);
+
     // jab data like hospscoh bse send kiya jaye   --> hm chate hai ki agr koi detals missing hai to save na data base me 
     //form wala to handle ho gya tha pr listings me post req hospcoch s e bhjeje ge to aad ho jaygi listing 
     //isiliye ye error handle krna ke method 1 hai-
@@ -54,6 +61,7 @@ module.exports.createListing=(async (req, res,next) => {
 
   newListing.owner=req.user._id;
     //aaise hi sare feilds ke liye define krge jo ek aacha devloper ka quality nahui hai-----we use JOI for schema validation
+    newListing.image={url,filename};
     await newListing.save();  // save the form data in the database
     req.flash("success","Listing Added Successfully");// flash message when listing addes succesfully
     res.redirect("/listings");

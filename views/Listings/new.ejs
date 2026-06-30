@@ -14,7 +14,9 @@
                             Add Your Apartment/Villa
                         </h2>
 
-                        <form method="POST" action="/listings" novalidate class="needs-validation">
+                        <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+
+                            
 
                             <div class="mb-3">
                                 <label for="title" class="form-label">
@@ -22,7 +24,7 @@
                                 </label>
                                 <input type="text" class="form-control" id="title" name="listing[title]"
                                     placeholder="Enter title of your listing" required>
-                               
+
                                 <div class="invalid-feedback">
                                     Please Enter title
                                 </div>
@@ -34,7 +36,7 @@
                                 </label>
                                 <textarea class="form-control" id="description" name="listing[description]" rows="4"
                                     placeholder="Enter description of your listing" required></textarea>
-                                
+
                                 <div class="invalid-feedback">
                                     Please enter description
                                 </div>
@@ -46,11 +48,24 @@
                                 </label>
                                 <input type="number" class="form-control" id="price" name="listing[price]"
                                     placeholder="Enter price" required>
-                              
+
                                 <div class="invalid-feedback">
                                     Please enter price
                                 </div>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="image" class="form-label">
+                                Select File
+                                </label>
+                                <input type="file" class="form-control" id="image" name="listing[image]"
+                                    placeholder="Enter price" required>
+
+                                <div class="invalid-feedback">
+                                    Upload File
+                                </div>
+                            </div>
+
 
                             <div class="mb-3">
                                 <label for="location" class="form-label">
@@ -58,7 +73,7 @@
                                 </label>
                                 <input type="text" class="form-control" id="location" name="listing[location]"
                                     placeholder="Enter location" required>
-                             
+
                                 <div class="invalid-feedback">
                                     Please enter location
                                 </div>
@@ -70,7 +85,7 @@
                                 </label>
                                 <input type="text" class="form-control" id="country" name="listing[country]"
                                     placeholder="Enter country" required>
-                              
+
                                 <div class="invalid-feedback">
                                     Please mention country
                                 </div>
