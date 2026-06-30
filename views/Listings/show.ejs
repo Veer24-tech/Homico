@@ -1,4 +1,7 @@
 <% layout("layouts/boilerplate") %>
+<script>
+   const     mapToken="<%= process.env.MAP_TOKEN%>";  // for using mapbox token from .env -to use map 
+</script>
 
     <div class="container mt-4">
 
@@ -105,36 +108,43 @@
                     <br>
                     <br>
                     <hr>
-
-                    <!-- posted review----- -->
-                    <h3><b>All Reviews</b></h3>
-                    <div class="row">
-                        <%for(let review of listingDetails.reviews ){%>
-                            <div class="card col-5 mb-3 ms-5">
-                                <div class="card-body">
-
-
-                                    <p class="card-title"><i>@<%=review.author.username%></i></p>
-                                    <p class="starability-result card-text"  data-rating=  "<%=review.rating%>"></p>
-                                    <p class="card-text">
-                                        <%=review.comment%>
-                                    </p>
-                                    <p class="card-text">
-                                        <%=review.rating%>Stars
-                                    </p>
-
-                                    <% if(currUser && currUser._id.equals(review.author._id)){ %>
-                                        <form method="post"
-                                            action="/listings/<%=listingDetails._id%>/reviews/<%=review._id%>?_method=DELETE">
-                                            <button class="btn btn-dark  btn-sm">Delete</button>
-                                        </form>
-                                          <%}%>
-                                </div>
-                            </div>
-                            <%}%>
-
-                    </div>
+                    <% if(listingDetails.reviews.length>0){ %>
+                        <!-- posted review----- -->
+                        <h3><b>All Reviews</b></h3>
+                        <div class="row">
+                            <%for(let review of listingDetails.reviews ){%>
+                                <div class="card col-5 mb-3 ms-5">
+                                    <div class="card-body">
 
 
+                                        <p class="card-title"><i>@<%=review.author.username%></i></p>
+                                        <p class="starability-result card-text" data-rating="<%=review.rating%>"></p>
+                                        <p class="card-text">
+                                            <%=review.comment%>
+                                        </p>
+                                        <p class="card-text">
+                                            <%=review.rating%>Stars
+                                        </p>
 
-        </div>
+                                        <% if(currUser && currUser._id.equals(review.author._id)){ %>
+                                            <form method="post"
+                                                action="/listings/<%=listingDetails._id%>/reviews/<%=review._id%>?_method=DELETE">
+                                                <button class="btn btn-dark  btn-sm">Delete</button>
+                                            </form>
+                                            <%}%>
+                                    </div>
+                               </div>
+                                <%}%>
+ 
+                                   
+                                       <%  }%>
+
+                                        <div class="col-8 offse-3 mb-3">
+                                            <h3>Where you'll be</h3>
+
+                                     
+                                        <div id="map"></div>
+ <script src="/js/map.js"></script>
+
+                        </div>
+                        </div> 

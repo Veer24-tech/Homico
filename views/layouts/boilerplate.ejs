@@ -10,22 +10,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-        <link rel="stylesheet" href="/css/review.css">
-    </head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/review.css">
+
+    <!-- maps -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.25.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.25.0/mapbox-gl.js"></script>
+</head>
 
 <body>
     <%- include("../includes/navbar.ejs")%>
-    <%- include("../includes/flash.ejs")%>
-    
-        <div class="container"><%-body-%></div>
+        <%- include("../includes/flash.ejs")%>
+
+            <div class="container"><%-body-%></div>
 
 
-<%- include("../includes/footer.ejs")%>
-        <!-- Latest compiled and minified JavaScript -->
-       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-            
-            <script src="/js/script.js"></script>
-            
-            </body>
+            <%- include("../includes/footer.ejs")%>
+                <!-- Latest compiled and minified JavaScript -->
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
+                <script src="/js/script.js"></script>
+
+</body>

@@ -27,7 +27,7 @@ router.get("/new", isLoggedIn,(listingController.renderNewForm));
 router
 .route("/:id")
 .get( wrapAsync(listingController.showListing))
-.put(validateListing,  isowner,   wrapAsync(listingController.updateListing))
+.put(validateListing,  isowner,upload.single('listing[image]'),   wrapAsync(listingController.updateListing))
 .delete(isLoggedIn,isowner, wrapAsync(listingController.deleteListing));
 
 //show route
