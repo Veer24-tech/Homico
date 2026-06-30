@@ -85,8 +85,14 @@ module.exports.updateListing=async (req, res) => {
     //// req.body.listing me form ka sara updated data (title, description, price, etc.) object ke form me hota hai.
     // findByIdAndUpdate() ko ye object dekar database me matching fields update kar dete hain.
 
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing });//{...req.body.listing} ka use krte hai kyuki req.body.listing me title,description,price,country,location sab hote hai to unko alag alag pass krne ke bajaye ...req.body.listing se sare data ko pass kr dete hai
-    req.flash("success","Details Updated!");
+   let listing= await Listing.findByIdAndUpdate(id, { ...req.body.listing });//{...req.body.listing} ka use krte hai kyuki req.body.listing me title,description,price,country,location sab hote hai to unko alag alag pass krne ke bajaye ...req.body.listing se sare data ko pass kr dete hai
+   if(typeof req.file!=="undefined"){ 
+   let url=req.file.path;// cloudinary se image save hone ke baad link
+    let filename=req.file.filename;
+    listing.image={url,filename}// puraniu image ka link aur filename new image se change
+    await listing.save();
+}
+   req.flash("success","Details Updated!");
     res.redirect(`/listings/${id}`);
 }
 //delete listing
