@@ -1,8 +1,8 @@
 <% layout("layouts/boilerplate") %>
-<script>
-   const     mapToken="<%= process.env.MAP_TOKEN%>";  // for using mapbox token from .env -to use map 
+ <script>
+const mapToken = "<%= process.env.MAP_TOKEN %>";
+const coordinates = <%- JSON.stringify(listingDetails.geometry.coordinates) %>;
 </script>
-
     <div class="container mt-4">
 
 

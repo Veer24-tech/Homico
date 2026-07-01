@@ -1,4 +1,8 @@
 let Listing=require('../model/listing');
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapToken=process.env.MAP_TOKEN;
+const geocodingClient= mbxGeocoding({ accessToken: mapToken });
+
 
 module.exports.index =(async (req, res) => {
     let allListings = await Listing.find({});
@@ -24,11 +28,19 @@ module.exports.showListing=async (req, res, next) => {
 
 //create listing form---
 module.exports.createListing=(async (req, res,next) => {
+
+  let response= await geocodingClient.forwardGeocode({
+  query: req.body.listing.location,
+  limit: 1
+})
+  .send();
+  
+
     console.log(req.file);
     let url=req.file.path;
-    let filename=req.file.filename;
-    console.log(url);
-    console.log(filename);
+    let filename=req.file.filename; 
+    // console.log(url);
+    // console.log(filename);
    
 //-- joi validation--//
 // let result=listingSchema.validate(req.body);
@@ -62,7 +74,10 @@ module.exports.createListing=(async (req, res,next) => {
   newListing.owner=req.user._id;
     //aaise hi sare feilds ke liye define krge jo ek aacha devloper ka quality nahui hai-----we use JOI for schema validation
     newListing.image={url,filename};
-    await newListing.save();  // save the form data in the database
+    newListing.geometry=response.body.features[0].geometry;
+    let savedListing=await newListing.save();  // save the form data in the database
+    console.log(savedListing);
+
     req.flash("success","Listing Added Successfully");// flash message when listing addes succesfully
     res.redirect("/listings");
 
@@ -84,14 +99,24 @@ module.exports.updateListing=async (req, res) => {
     let { id } = req.params;
     //// req.body.listing me form ka sara updated data (title, description, price, etc.) object ke form me hota hai.
     // findByIdAndUpdate() ko ye object dekar database me matching fields update kar dete hain.
+  
+    let response = await geocodingClient.forwardGeocode({
+        query: req.body.listing.location,
+        limit: 1,
+    }).send();
 
-   let listing= await Listing.findByIdAndUpdate(id, { ...req.body.listing });//{...req.body.listing} ka use krte hai kyuki req.body.listing me title,description,price,country,location sab hote hai to unko alag alag pass krne ke bajaye ...req.body.listing se sare data ko pass kr dete hai
+   let listing= await Listing.findByIdAndUpdate(id,
+    {...req.body.listing},{new:true}
+   );//{...req.body.listing} ka use krte hai kyuki req.body.listing me title,description,price,country,location sab hote hai to unko alag alag pass krne ke bajaye ...req.body.listing se sare data ko pass kr dete hai
+       listing.geometry = response.body.features[0].geometry;
    if(typeof req.file!=="undefined"){ 
    let url=req.file.path;// cloudinary se image save hone ke baad link
     let filename=req.file.filename;
     listing.image={url,filename}// puraniu image ka link aur filename new image se change
-    await listing.save();
+ 
+   
 }
+ await listing.save();
    req.flash("success","Details Updated!");
     res.redirect(`/listings/${id}`);
 }
